@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz Aniversario</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+
+body{overflow-x:hidden;color:white;background:black}
+
+/* LOADER NEGRO */
+#loader{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+    flex-direction:column;
+    transition:opacity 1s;
+}
+
+/* TEXTO NEON */
+.loader-content h1{
+    color:#0af;
+    text-shadow:0 0 10px #0af,0 0 30px #0af,0 0 60px #0af;
+}
+
+/* BARRA */
+.progress-bar{
+    width:260px;
+    height:12px;
+    background:#111;
+    border-radius:20px;
+    overflow:hidden;
+    margin:20px 0;
+    border:1px solid #0af;
+}
+
+/* EFECTO NEON ANIMADO */
+.progress{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#001aff,#00d4ff,#001aff);
+    background-size:200% 100%;
+    animation:neonMove 2s linear infinite;
+    box-shadow:0 0 10px #00d4ff,0 0 30px #00d4ff;
+}
+
+@keyframes neonMove{
+    0%{background-position:0%}
+    100%{background-position:200%}
+}
+
+/* VIDEO */
+video.bg{
+    position:fixed;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-2;
+    filter:brightness(0.4);
+}
+
+.overlay{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:radial-gradient(circle,transparent,rgba(0,0,0,0.8));
+    z-index:-1;
+}
+
+/* PLAYER */
+.player{
+    position:fixed;
+    top:20px;
+    right:20px;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(15px);
+    padding:10px;
+    border-radius:20px;
+    display:flex;
+    gap:10px;
+}
+
+/* CONTENIDO */
+.container{padding:120px 20px;text-align:center}
+
+/* CARRUSEL */
+.carousel{
+    position:relative;
+    max-width:420px;
+    margin:auto;
+    overflow:hidden;
+    border-radius:25px;
+}
+
+/* SLIDES */
+.slides{display:flex;transition:transform 0.6s ease}
+.slide{min-width:100%}
+
+/* 🔥 IMÁGENES CUADRADAS PERFECTAS */
+.slide img,.slide video{
+    width:100%;
+    aspect-ratio:1/1; /* 🔥 clave */
+    object-fit:cover;
+    object-position:center;
+}
+
+/* FLECHAS */
+
+.arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:30px;
+    background:rgba(0,0,0,0.6);
+    border:none;
+    color:#0af;
+    padding:12px;
+    border-radius:50%;
+    cursor:pointer;
+    z-index:10; /* 🔥 clave */
+    opacity:1; /* 🔥 siempre visibles */
+}
+
+
+
+.left{left:10px}
+.right{right:10px}
+
+/* DOTS */
+.dots{display:flex;justify-content:center;margin-top:10px}
+.dot{width:10px;height:10px;border-radius:50%;background:#555;margin:5px;cursor:pointer}
+.active{background:#0af}
+
+/* CARTA */
+.letter{
+    margin-top:50px;
+    padding:30px;
+    background:rgba(255,255,255,0.05);
+    border-radius:20px;
+    backdrop-filter:blur(10px);
+}
+
+/* MODAL */
+.modal{
+    display:none;
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:black;
+    justify-content:center;
+    align-items:center;
+}
+
+.modal img,.modal video{
+    max-width:90%;
+    max-height:90%;
+}
+
+/* CORAZONES */
+.heart{
+    position:fixed;
+    color:#0af;
+    animation:float 5s linear infinite;
+}
+
+@keyframes float{
+    from{transform:translateY(100vh)}
+    to{transform:translateY(-10vh)}
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+    <div class="loader-content">
+        <h1>Cargando regalo 💙</h1>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <p id="percent">0%</p>
+    </div>
+</div>
+
+<video class="bg" autoplay muted loop>
+    <source src="video.mp4">
+</video>
+<div class="overlay"></div>
+
+<div class="player">
+    <button onclick="toggleMusic()">🎵</button>
+    <audio id="music">
+        <source src="golden hour.mp3">
+    </audio>
+    <input type="range" min="0" max="1" step="0.01" value="1" onchange="music.volume=this.value">
+</div>
+
+<div class="container">
+<h1>Nosotros en todo un año 💙</h1>
+
+<div class="carousel">
+<button class="arrow left" onclick="move(-1)">❮</button>
+<button class="arrow right" onclick="move(1)">❯</button>
+
+<div class="slides" id="slides">
+<div class="slide"><img src="foto 1.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 2.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 3.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 4.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 5.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 6.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 7.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 8.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 9.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 10.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 11.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 12.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 13.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 14.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 15.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 16.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 17.jpg" onclick="openMedia(this.src)"></div>
+<div class="slide"><img src="foto 18.jpg" onclick="openMedia(this.src)"></div>
+
+
+<div class="slide">
+<video autoplay muted loop onclick="openVideo(this.querySelector('source').src)">
+<source src="video 1.mp4">
+</video>
+</div>
+</div>
+</div>
+
+<div class="dots" id="dots"></div>
+
+<div class="letter">
+<h2>Para mi persona favorita que amo con toda mi alma </h2>
+<p> Desde que llegaste a mi vida, todo cambió de la forma más hermosa posible. Cada momento a tu lado es el más especial de mi vida que atesoro con el corazón. Aunque he sido muy insistente al principio, estoy feliz de haber esperado y conquistado tu hermoso corazón. Tienes unos sentimientos preciosos y muy bellos. Te mereces el mundo, mi Ren. Tus amagos, las bromas que nos hacemos, tu amor incondicional y las charlas para competir quien ama más al otro se han convertido en algo muy especial para mí. Eres mi todo, mi razón de ser. Aunque hay días que se pongan grises y lluviosos, yo estaré siempre a tu lado para abrazarte y darte un paraguas en caso de tormentas. ¿Sabías que mi sonido favorito es tu risa? No es el sonido de mi canción favorita. Tu voz y tu risa es tan hermosa que pintan mi vida con muchos colores, te adoro como eres, mi amor. Gracias por hacerme la mujer mas feliz del universo. Te quiero y estaré a tu lado por toda la eternidad. </p> 
+<p> Gracias por existir, por acompañarme y por hacerme sentir tan amada. </p> 
+<p> Te amo hoy, mañana y siempre. Feliz Aniversario, Ren ❤️ </p>
+</div>
+</div>
+
+<div class="modal" id="modal" onclick="this.style.display='none'">
+<img id="modalImg">
+<video id="modalVid" controls></video>
+</div>
+
+<script>
+const slides=document.getElementById("slides");
+const total=slides.children.length;
+const dotsContainer=document.getElementById("dots");
+let i=0;
+
+/* DOTS */
+for(let d=0;d<total;d++){
+let dot=document.createElement("div");
+dot.classList.add("dot");
+dot.onclick=()=>{i=d;update()};
+dotsContainer.appendChild(dot);
+}
+updateDots();
+
+/* 🔥 MOVE CORREGIDO (SIN LOOP AUTOMÁTICO) */
+function move(dir){
+    i += dir;
+
+    if(i >= total){
+        i = total - 1;
+    }
+
+    if(i < 0){
+        i = 0;
+    }
+
+    update();
+}
+
+/* ❌ ELIMINADO AUTO SLIDE */
+
+/* UPDATE */
+function update(){
+slides.style.transform=`translateX(-${i*100}%)`;
+updateDots();
+}
+
+function updateDots(){
+document.querySelectorAll(".dot").forEach((d,idx)=>{
+d.classList.toggle("active",idx===i);
+});
+}
+
+/* 🔥 SWIPE MEJORADO */
+let startX=0;
+slides.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+slides.addEventListener("touchend",e=>{
+let diff=e.changedTouches[0].clientX-startX;
+
+if(diff>50 && i>0) move(-1);
+if(diff<-50 && i<total-1) move(1);
+});
+
+/* MUSIC */
+const music=document.getElementById("music");
+
+window.addEventListener("load",()=>{
+music.play().catch(()=>{});
+});
+
+document.addEventListener("click",()=>{
+if(music.paused) music.play();
+},{once:true});
+
+function toggleMusic(){
+if(music.paused) music.play();
+else music.pause();
+}
+
+/* MODAL */
+function openMedia(src){
+modal.style.display="flex";
+modalImg.src=src;
+modalVid.style.display="none";
+}
+function openVideo(src){
+modal.style.display="flex";
+modalVid.src=src;
+modalVid.style.display="block";
+modalVid.play();
+modalImg.style.display="none";
+}
+
+/* LOADER */
+let load=0;
+const progress=document.getElementById("progress");
+const percent=document.getElementById("percent");
+
+const interval=setInterval(()=>{
+load++;
+progress.style.width=load+"%";
+percent.innerText=load+"%";
+
+if(load>=100){
+clearInterval(interval);
+setTimeout(()=>{
+loader.style.opacity="0";
+setTimeout(()=>loader.style.display="none",1000);
+},500);
+}
+},30);
+</script>
+
+</body>
+</html>
